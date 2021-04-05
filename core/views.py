@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from core.paillier import paillier as pai
 class CaeserCypherView(APIView):
     def post(self,request,*args,**kwargs):
         plainText = request.data.get('plainText')
@@ -86,6 +86,35 @@ class PA0View(APIView):
             'graphdata' : d
         }
         # data = {'n':'n'}
+        return Response(data)
+
+class KeyGeneratorView(APIView):
+    def post(self,request,*args,**kwargs):
+        bits = request.data.get('bits')
+        bits = int(bits)
+        pr,pb = pai.generateKeypair(bits)
+        data = {
+            'pbn' : str(pb.n),
+            'pbg' : str(pb.g),
+            'prl' : str(pr.l),
+            'prmu' : str(pr.mu)
+        }
+        return Response(data)
+
+import cv2
+import numpy as np
+from core.paillier import encryptImage
+class EncryptImageView(APIView):
+    def post(self,request,*args,**kwargs):
+        image = np.asarray(bytearray(request.data['myFile'].read()), dtype="uint8")
+        image = cv2.imdecode(image,0)
+        pbn = int(request.data['pbn'])
+        pbg = int(request.data['pbg'])
+        enc_img = encryptImage.encrypt(image,pbn,pbg)
+        enc_json = encryptImage.toJson(enc_img)
+        data = {
+            "cipher" : enc_json
+        }
         return Response(data)
 # def test_view(request):
 #     print(request)

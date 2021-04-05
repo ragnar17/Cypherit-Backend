@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from core.views import CaeserCypherView,PA0View
+from core.views import CaeserCypherView,PA0View,KeyGeneratorView,EncryptImageView
 
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
     path('caeser',CaeserCypherView.as_view(),name='CaeserCypher'),
-    path('pa0',PA0View.as_view(),name="PA0")
+    path('pa0',PA0View.as_view(),name="PA0"),
+    path('generate-keys',KeyGeneratorView.as_view(),name="KeyGenerator0"),
+    path('encrypt-image',EncryptImageView.as_view(),name="EncryptImage"),
 ]
