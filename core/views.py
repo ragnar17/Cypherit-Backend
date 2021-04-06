@@ -104,6 +104,8 @@ class KeyGeneratorView(APIView):
 import cv2
 import numpy as np
 from core.paillier import encryptImage
+from core.paillier import paillier
+from core.paillier import floating_point as fp
 class EncryptImageView(APIView):
     def post(self,request,*args,**kwargs):
         image = np.asarray(bytearray(request.data['myFile'].read()), dtype="uint8")
@@ -114,6 +116,130 @@ class EncryptImageView(APIView):
         enc_json = encryptImage.toJson(enc_img)
         data = {
             "cipher" : enc_json
+        }
+        return Response(data)
+import json
+from django.http import HttpResponse
+from core.paillier import decryptImage as dc
+from django.http import FileResponse
+from core.paillier import ImageOperations as ig
+import base64
+def get_data(request):
+    data = json.loads(request.data['data'])
+    data = data['cipher']
+    enc_img = []
+    n,m = len(data),len(data[0])
+    for i in range(n):
+        tmp = [0]*m
+        for j in range(m):
+            val = json.loads(data[i][j])
+            tmp[j] = fp.FloatingPoint(int(val['mantissa']),int(val['exponent']))
+        enc_img.append(tmp)
+    pb = paillier.PublicKey(int(request.data['pbn']),int(request.data['pbg']))
+    pr = paillier.PrivateKey(int(request.data['prl']),int(request.data['prmu']))
+
+    return pr,pb,enc_img
+class DecryptImageView(APIView):
+    def post(self,request,*args,**kwargs):
+        pr,pb,enc_img = get_data(request)
+        omg = dc.decrypt(pr,pb,enc_img)
+        omg = dc.convertToByte(omg)
+        base64EncodedStr = base64.b64encode(omg)
+        # print(base64EncodedStr)
+
+        data = {
+            "b64" : base64EncodedStr
+        }
+        return Response(data)
+
+import pickle
+import requests
+class ImageIncreaseBrightness(APIView):
+    def post(self,request,*args,**kwargs):
+        pr,pb,enc_img = get_data(request)
+        v = int(request.data['brightness'])
+        out_img = ig.Secure_Image_Adjustment_Brightness_Control(enc_img,v,pb)
+
+        # data = {
+        # 	'enc_img' : enc_img,
+        # 	'v' : v,
+        # 	'pb' : pb
+        # }
+        # data2 = pickle.dumps(data,protocol=2)
+        # url = "http://pailliercryptosystem.pythonanywhere.com/brightness_control"
+        #
+        # r = requests.post(url,data=data2)
+        # out_img = pickle.loads(r.content)
+
+        dec_img = dc.decrypt(pr,pb,out_img)
+        out_json = encryptImage.toJson(out_img)
+        omg = dc.convertToByte(dec_img)
+        base64EncodedStr = base64.b64encode(omg)
+        # data = {
+        #     "cipher" : out_json,
+        #     "b64" : base64EncodedStr
+        # }
+        data = {
+            "b64" : base64EncodedStr
+        }
+        return Response(data)
+class ImageNegation(APIView):
+    def post(self,request,*args,**kwargs):
+        pr,pb,enc_img = get_data(request)
+        v = int(request.data['negation'])
+        if v:
+            out_img = ig.Secure_Image_Adjustment_Image_negation(enc_img,255,pb)
+        else:
+            out_img = enc_img
+        dec_img = dc.decrypt(pr,pb,out_img)
+        omg = dc.convertToByte(dec_img)
+        base64EncodedStr = base64.b64encode(omg)
+        # data = {
+        #     "cipher" : out_json,
+        #     "b64" : base64EncodedStr
+        # }
+        data = {
+            "b64" : base64EncodedStr
+        }
+        return Response(data)
+class ImageBlur(APIView):
+    def post(self,request,*args,**kwargs):
+        pr,pb,enc_img = get_data(request)
+        v = int(request.data['blur'])
+        out_img = ig.Secure_Noise_Reduction_LPF(enc_img,v,v,pb)
+
+        dec_img = dc.decrypt(pr,pb,out_img)
+        omg = dc.convertToByte(dec_img)
+        base64EncodedStr = base64.b64encode(omg)
+
+        data = {
+            "b64" : base64EncodedStr
+        }
+        return Response(data)
+import copy
+import math
+class ImageEdgeDetect(APIView):
+    def post(self,request,*args,**kwargs):
+        pr,pb,enc_img = get_data(request)
+        kerX = [[1,0,-1],[2,0,-2],[1,0,-1]]
+        kerY = [[1,2,1],[0,0,0],[-1,-2,-1]]
+
+        out_img1 = ig.sobelOperator(enc_img,kerX,pb)
+        out_img2 = ig.sobelOperator(enc_img,kerY,pb)
+
+        dec_img1 = dc.decrypt(pr,pb,out_img1)
+        dec_img2 = dc.decrypt(pr,pb,out_img2)
+        dec_img = copy.deepcopy(dec_img1)
+        n,m = len(dec_img),len(dec_img[0])
+        for i in range(n):
+            for j in range(n):
+                dec_img[i][j] = max(0,min(255,int(math.sqrt(dec_img1[i][j]**2+dec_img2[i][j]**2))))
+
+        omg = dc.convertToByte(dec_img)
+        base64EncodedStr = base64.b64encode(omg)
+
+        data = {
+            "b64" : base64EncodedStr
         }
         return Response(data)
 # def test_view(request):
