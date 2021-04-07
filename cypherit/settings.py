@@ -128,6 +128,7 @@ CORS_ALLOW_ALL_ORIGINS=True
 ALLOWED_HOSTS=['*']
 STATIC_URL = '/static/'
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 * 50
 # REST_FRAMEWORK = {
 #     # Use Django's standard `django.contrib.auth` permissions,
 #     # or allow read-only access for unauthenticated users.

@@ -18,7 +18,7 @@ def toJson(img):
 	n,m = len(img),len(img[0])
 	data = []
 	for i in range(n):
-		data.append([0]*n)
+		data.append([0]*m)
 		for j in range(m):
 			data[i][j] = img[i][j].to_json()
 	return data
