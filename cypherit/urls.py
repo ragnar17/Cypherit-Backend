@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from core.views import CaeserCypherView,PA0View,KeyGeneratorView,EncryptImageView
-from core.views import DecryptImageView,ImageIncreaseBrightness,ImageNegation,ImageBlur,ImageEdgeDetect
+from core.views import DecryptImageView,ImageIncreaseBrightness,ImageNegation,ImageBlur,ImageEdgeDetect, Des
 
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
@@ -30,4 +30,5 @@ urlpatterns = [
     path('image-negation',ImageNegation.as_view(),name="ImageNegation"),
     path('image-blur',ImageBlur.as_view(),name="ImageBlur"),
     path('image-edge-detect',ImageEdgeDetect.as_view(),name="ImageEdgeDetect"),
+    path('des',Des.as_view(),name="DES"),
 ]

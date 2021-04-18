@@ -194,10 +194,7 @@ class ImageNegation(APIView):
         dec_img = dc.decrypt(pr,pb,out_img)
         omg = dc.convertToByte(dec_img)
         base64EncodedStr = base64.b64encode(omg)
-        # data = {
-        #     "cipher" : out_json,
-        #     "b64" : base64EncodedStr
-        # }
+
         data = {
             "b64" : base64EncodedStr
         }
@@ -240,6 +237,21 @@ class ImageEdgeDetect(APIView):
 
         data = {
             "b64" : base64EncodedStr
+        }
+        return Response(data)
+
+from core.des import Task as task
+class Des(APIView):
+    def post(self,request,*args,**kwargs):
+        rounds = int(request.data["rounds"])
+        block_size = int(request.data["blockSize"])
+        txt = request.data["plainText"]
+        key = request.data["key"]
+        mode = request.data["mode"]
+        res, res_ = task.runDes(key,block_size,rounds,txt,mode)
+
+        data = {
+            "txt" : res
         }
         return Response(data)
 # def test_view(request):
