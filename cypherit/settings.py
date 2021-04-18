@@ -27,8 +27,9 @@ SECRET_KEY = '9=$7=1jyh3-3+p@)=6cr(ys8vj%8zw)gz-2m36s#hh!4*l0%@8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','https://ragnar17.github.io']
 CORS_ORIGIN_WHITELIST = [
+    'https://ragnar17.github.io',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'http://192.168.43.144:3000'
