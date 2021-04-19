@@ -21,7 +21,7 @@ def runDes(key,block_size,rounds,txt,mode,seed = 7):
 	if mode :
 		res, res_ = des_o.encrypt(txt)
 	else:
-		res, res_ = des_o.encrypt(txt)
+		res, res_ = des_o.decrypt(txt)
 	return res ,res_
 
 def getGraph(key,block_size,rounds,txt,mode,seed = 7):
