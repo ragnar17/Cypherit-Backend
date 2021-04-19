@@ -236,7 +236,7 @@ class ImageEdgeDetect(APIView):
         }
         return Response(data)
 
-from core.des import Task as task
+from core.des import desService as desService
 class Des(APIView):
     def post(self,request,*args,**kwargs):
         rounds = int(request.data["rounds"])
@@ -244,11 +244,39 @@ class Des(APIView):
         txt = request.data["txt"]
         key = request.data["key"]
         mode = request.data["mode"]
-        res, res_ = task.runDes(key,block_size,rounds,txt,mode)
+        seed = int(request.data["seed"])
+        res, res_ = desService.runDes(key,block_size,rounds,txt,mode,seed)
 
         data = {
             "txt" : res
         }
+        return Response(data)
+class DesAvalanche(APIView):
+    def post(self,request,*args,**kwargs):
+        rounds = int(request.data["rounds"])
+        block_size = int(request.data["blockSize"])
+        txt = request.data["txt"]
+        key = request.data["key"]
+        mode = request.data["mode"]
+        seed = int(request.data["seed"])
+        x,y = desService.getGraph(key,block_size,rounds,txt,mode,seed)
+        d = []
+
+        for i in range(rounds):
+            d.append({"name":i+1,
+                        "Change in Key with Block-Size 16":y[0][i],
+                        "Change in Key with Block-Size 32":y[1][i],
+                        "Change in Key with Block-Size 64":y[2][i],
+                        "Change in text with Block-Size 16":y[3][i],
+                        "Change in text with Block-Size 32":y[4][i],
+                        "Change in text with Block-Size 64":y[5][i],})
+        # print(x,y)
+
+
+        data = {
+            "graphdata" : d
+        }
+
         return Response(data)
 # def test_view(request):
 #     print(request)
