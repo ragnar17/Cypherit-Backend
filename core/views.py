@@ -245,7 +245,8 @@ class Des(APIView):
         key = request.data["key"]
         mode = request.data["mode"]
         seed = int(request.data["seed"])
-        res, res_ = desService.runDes(key,block_size,rounds,txt,mode,seed)
+        padding = int(request.data["padding"])
+        res, res_ = desService.runDes(key,block_size,rounds,txt,mode,padding,seed)
 
         data = {
             "txt" : res
@@ -259,7 +260,8 @@ class DesAvalanche(APIView):
         key = request.data["key"]
         mode = request.data["mode"]
         seed = int(request.data["seed"])
-        x,y = desService.getGraph(key,block_size,rounds,txt,mode,seed)
+        padding = int(request.data["padding"])
+        x,y = desService.getGraph(key,block_size,rounds,txt,mode,padding,seed)
         d = []
 
         for i in range(rounds):
