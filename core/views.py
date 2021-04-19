@@ -241,7 +241,7 @@ class Des(APIView):
     def post(self,request,*args,**kwargs):
         rounds = int(request.data["rounds"])
         block_size = int(request.data["blockSize"])
-        txt = request.data["plainText"]
+        txt = request.data["txt"]
         key = request.data["key"]
         mode = request.data["mode"]
         res, res_ = task.runDes(key,block_size,rounds,txt,mode)
