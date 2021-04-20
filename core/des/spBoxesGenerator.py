@@ -14,8 +14,9 @@ def create_array(n):
 	return random_shuffle(50,[i+1 for i in range(n)])
 
 def create_permutation(arr,dont_take):
-	for i in dont_take:
-		arr.remove(i)
+	for i in range(dont_take):
+		x = random.randint(0,len(arr))
+		arr.remove(arr[x])
 	return arr
 
 def inverse_permutation(arr):
@@ -24,7 +25,7 @@ def inverse_permutation(arr):
 		tmp[arr[i]-1] = i+1
 	return tmp
 class ESP_BOX_Generator:
-	
+
 	def __init__(self,block_size,seed):
 		random.seed(seed)
 		self.seed = seed
@@ -33,13 +34,13 @@ class ESP_BOX_Generator:
 
 	def run(self):
 		ignored = self.block_size//8
-		self.PC_1 = create_permutation(create_array(self.block_size),create_array(ignored))
+		self.PC_1 = create_permutation(create_array(self.block_size),ignored)
 
-		self.PC_2 = create_permutation(create_array(self.block_size-ignored),create_array(ignored))
+		self.PC_2 = create_permutation(create_array(self.block_size-ignored),ignored)
 
 		#Intial Permutation and Inverse Permuation
-		self.IP = create_permutation(create_array(self.block_size),[])
-	
+		self.IP = create_permutation(create_array(self.block_size),0)
+
 		self.IP_dash = inverse_permutation(self.IP)
 
 		self.S_BOX = []
@@ -49,9 +50,9 @@ class ESP_BOX_Generator:
 			for j in range(4):
 				s_tmp.append(random_shuffle(50,tmp))
 			self.S_BOX.append(s_tmp)
-		
+
 		#P-Box which shuflles the 32bit block
-		self.P = create_permutation(create_array(self.block_size//2),[])
+		self.P = create_permutation(create_array(self.block_size//2),0)
 
 		#Expansion Box
 		E_tmp = [i+1 for i in range(self.block_size//2)]
@@ -70,19 +71,19 @@ class ESP_BOX_Generator:
 		print("PC_1 =",self.PC_1)
 		print("PC_2 =",self.PC_2)
 
-		
+
 		print("IP =",self.IP)
 
-		
+
 		print("IP_dash =",self.IP_dash)
 
 
 		print("S_BOX =",self.S_BOX)
 
-		
+
 		print("P =",self.P)
 
-		
+
 		print("E =",self.E)
 
 # e = ESP_BOX_Generator(16,20)
