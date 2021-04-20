@@ -15,7 +15,7 @@ def create_array(n):
 
 def create_permutation(arr,dont_take):
 	for i in range(dont_take):
-		x = random.randint(0,len(arr))
+		x = random.randint(0,len(arr))%len(arr)
 		arr.remove(arr[x])
 	return arr
 
