@@ -14,17 +14,17 @@ class CaeserCypherView(APIView):
         cFreq = [0]*26
         mxP = mxC = 1
         for i in plainText:
-            if(i == " "):
-                cipher += i
-                continue
             if(ord(i) >= ord('a') and ord(i) <=ord('z')):
                 tmp = (shift + ord(i)-ord('a'))%26
                 tmp = (tmp+26)%26
                 c = chr(ord('a')+tmp)
-            else:
+            elif(ord(i) >= ord('A') and ord(i) <=ord('Z')):
                 tmp = (shift + ord(i)-ord('A'))%26
                 tmp = (tmp+26)%26
                 c = chr(ord('A')+tmp)
+            else:
+                cipher += i
+                continue
             cipher += c
             c = chr(ord('a')+tmp)
             cur = i.lower()
@@ -54,17 +54,18 @@ class PA0View(APIView):
         cFreq = [0]*26
         mxP = mxC = 1
         for i in plainText:
-            if(i == " "):
-                cipher += i
-                continue
+
             if(ord(i) >= ord('a') and ord(i) <=ord('z')):
                 tmp = (25 - ord(i)+ord('a'))%26
                 tmp = (tmp+26)%26
                 c = chr(ord('a')+tmp)
-            else:
+            elif(ord(i) >= ord('A') and ord(i) <=ord('Z')):
                 tmp = (25 - ord(i)+ord('A'))%26
                 tmp = (tmp+26)%26
                 c = chr(ord('A')+tmp)
+            else:
+                cipher += i
+                continue
             cipher += c
             c = chr(ord('a')+tmp)
             cur = i.lower()

@@ -20,6 +20,16 @@ def runDes(key,block_size,rounds,txt,mode,padding,seed = 7):
 	des_o = des_mod.DES_M(block_size,rounds,key,seed,0)
 	if mode :
 		res, res_ = des_o.encrypt(txt,padding)
+		#convert the output to Hexadecimal
+		# bin_arr = des_o.string_to_binary(res,8)
+		# fin_res = ""
+		# for i in range(0,len(bin_arr),4):
+		# 	tmp = ""
+		# 	for j in range(i,i+4,1):
+		# 		tmp += str(j)
+		# 	tmp = int(j,2)
+		# 	fin_res += tmp < 10 ? str(tmp) : chr(ord('a')-10)
+		# return fin_res, res_
 	else:
 		res, res_ = des_o.decrypt(txt,padding)
 	return res ,res_
