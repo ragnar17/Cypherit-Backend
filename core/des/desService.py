@@ -21,16 +21,29 @@ def runDes(key,block_size,rounds,txt,mode,padding,seed = 7):
 	if mode :
 		res, res_ = des_o.encrypt(txt,padding)
 		#convert the output to Hexadecimal
-		# bin_arr = des_o.string_to_binary(res,8)
-		# fin_res = ""
-		# for i in range(0,len(bin_arr),4):
-		# 	tmp = ""
-		# 	for j in range(i,i+4,1):
-		# 		tmp += str(j)
-		# 	tmp = int(j,2)
-		# 	fin_res += tmp < 10 ? str(tmp) : chr(ord('a')-10)
-		# return fin_res, res_
+		bin_arr = des_o.string_to_binary(res,8)
+		fin_res = ""
+		for i in range(0,len(bin_arr),4):
+			tmp = ""
+			for j in range(i,i+4,1):
+				tmp += str(bin_arr[j])
+			tmp = int(tmp,2)
+			if tmp < 10:
+				fin_res += str(tmp)
+			else :
+				fin_res += chr(ord('A')+tmp-10)
+		res = fin_res
 	else:
+		tmp = []
+		for i in txt:
+			if(ord(i)>=ord('0') and ord(i)<=ord('9')):
+				val = ord(i) - ord('0')
+			else:
+				val = ord(i) - ord('A') + 10
+			bini = des_o.num_to_binary(val,4)
+			for j in bini:
+				tmp.append(ord(j)-ord('0'))
+		txt = des_o.bit_array_to_string(tmp)
 		res, res_ = des_o.decrypt(txt,padding)
 	return res ,res_
 
