@@ -57,7 +57,7 @@ def getGraph(key,block_size,rounds,txt,mode,padding,seed = 7):
 		msg2 += msg[i]
 	#Change in Key
 	for i in blocks:
-		x,y = getDataPoints(key,msg,msg2,rounds,i,seed,1,padding)
+		x,y = getDataPoints(key,msg,msg,rounds,i,seed,1,padding)
 		x_points.append(x)
 		y_points.append(y)
 	# Change in plaintext

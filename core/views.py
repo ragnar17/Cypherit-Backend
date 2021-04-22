@@ -267,12 +267,12 @@ class DesAvalanche(APIView):
 
         for i in range(rounds):
             d.append({"name":i+1,
-                        "Change in Key with Block-Size 16":y[0][i],
-                        "Change in Key with Block-Size 32":y[1][i],
-                        "Change in Key with Block-Size 64":y[2][i],
-                        "Change in text with Block-Size 16":y[3][i],
-                        "Change in text with Block-Size 32":y[4][i],
-                        "Change in text with Block-Size 64":y[5][i],})
+                        "For Change in Key with Block-Size 16":y[0][i],
+                        "For Change in Key with Block-Size 32":y[1][i],
+                        "For Change in Key with Block-Size 64":y[2][i],
+                        "For Change in text with Block-Size 16":y[3][i],
+                        "For Change in text with Block-Size 32":y[4][i],
+                        "For Change in text with Block-Size 64":y[5][i],})
         # print(x,y)
 
 
