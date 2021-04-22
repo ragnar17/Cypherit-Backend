@@ -113,7 +113,7 @@ class DES_M:
                 #S-box
                 R_dash = self.substitution(R_dash)
 
-                # R_dash = self.permutation(R_dash,self.boxes.P)
+                R_dash = self.permutation(R_dash,self.boxes.P)
 
 
                 R_dash = self.xor(R_dash,L)

@@ -273,8 +273,6 @@ class DesAvalanche(APIView):
                         "For Change in text with Block-Size 16":y[3][i],
                         "For Change in text with Block-Size 32":y[4][i],
                         "For Change in text with Block-Size 64":y[5][i],})
-        # print(x,y)
-
 
         data = {
             "graphdata" : d

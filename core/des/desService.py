@@ -4,7 +4,6 @@ def getDataPoints(key,msg,msg2,rounds,block_size,seed,mask,padding):
 	cypher , cypher_dash = des_o.encrypt(msg,padding)
 
 	m , _ = des_o.decrypt(cypher,padding)
-
 	des_o2 = des_mod.DES_M(block_size,rounds,key,seed,1&mask)
 	cypher2 , cypher_dash2 = des_o2.encrypt(msg2,padding)
 	# #For Graph
@@ -46,7 +45,7 @@ def runDes(key,block_size,rounds,txt,mode,padding,seed = 7):
 		txt = des_o.bit_array_to_string(tmp)
 		res, res_ = des_o.decrypt(txt,padding)
 	return res ,res_
-
+	
 def getGraph(key,block_size,rounds,txt,mode,padding,seed = 7):
 	blocks = [16,32,64]
 	x_points = []
