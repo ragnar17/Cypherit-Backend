@@ -13,6 +13,31 @@ class DES_M:
     def char_to_binary(self,x,sz):
         return self.num_to_binary(ord(x),sz)
 
+    def string_to_hex(self,s):
+        bin_arr = self.string_to_binary(s,8)
+        fin_res = ""
+        for i in range(0,len(bin_arr),4):
+            tmp = ""
+            for j in range(i,i+4,1):
+                tmp += str(bin_arr[j])
+            tmp = int(tmp,2)
+            if tmp < 10:
+                fin_res += str(tmp)
+            else :
+                fin_res += chr(ord('A')+tmp-10)
+        return fin_res
+    def hex_to_string(self,s):
+        tmp = []
+        for i in s:
+            if(ord(i)>=ord('0') and ord(i)<=ord('9')):
+                val = ord(i) - ord('0')
+            else:
+                val = ord(i) - ord('A') + 10
+            bini = self.num_to_binary(val,4)
+            for j in bini:
+                tmp.append(ord(j)-ord('0'))
+        return self.bit_array_to_string(tmp)
+
     def num_to_binary(self,x,sz):
         res = bin(x)[2:]
         while len(res) < sz :

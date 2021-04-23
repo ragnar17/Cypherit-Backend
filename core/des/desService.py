@@ -15,37 +15,24 @@ def getDataPoints(key,msg,msg2,rounds,block_size,seed,mask,padding):
 	return x_points,y_points
 
 
-def runDes(key,block_size,rounds,txt,mode,padding,seed = 7):
+def runDes(key,block_size,rounds,txt,mode,padding,plainTextType,cipherTextType,seed = 7):
 	des_o = des_mod.DES_M(block_size,rounds,key,seed,0)
 	if mode :
+		if plainTextType == "HEX" :
+			txt = des_o.hex_to_string(txt)
 		res, res_ = des_o.encrypt(txt,padding)
-		#convert the output to Hexadecimal
-		bin_arr = des_o.string_to_binary(res,8)
-		fin_res = ""
-		for i in range(0,len(bin_arr),4):
-			tmp = ""
-			for j in range(i,i+4,1):
-				tmp += str(bin_arr[j])
-			tmp = int(tmp,2)
-			if tmp < 10:
-				fin_res += str(tmp)
-			else :
-				fin_res += chr(ord('A')+tmp-10)
-		res = fin_res
+
+		if cipherTextType == "HEX":
+			res = des_o.string_to_hex(res)
 	else:
-		tmp = []
-		for i in txt:
-			if(ord(i)>=ord('0') and ord(i)<=ord('9')):
-				val = ord(i) - ord('0')
-			else:
-				val = ord(i) - ord('A') + 10
-			bini = des_o.num_to_binary(val,4)
-			for j in bini:
-				tmp.append(ord(j)-ord('0'))
-		txt = des_o.bit_array_to_string(tmp)
+		if cipherTextType == "HEX":
+			txt = des_o.hex_to_string(txt)
 		res, res_ = des_o.decrypt(txt,padding)
+		if plainTextType == "HEX":
+			res = des_o.string_to_hex(res)
+			
 	return res ,res_
-	
+
 def getGraph(key,block_size,rounds,txt,mode,padding,seed = 7):
 	blocks = [16,32,64]
 	x_points = []
